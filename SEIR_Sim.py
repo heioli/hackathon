@@ -28,9 +28,6 @@ def solver(methods,f,y,t,h):
 
 
     for k_i in range(nbr_k):
-
-
-
-
-
-
+        print(k_i)
+        
+        
