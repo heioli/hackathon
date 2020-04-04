@@ -1,11 +1,11 @@
 from dataclasses import dataclass
 import numpy as np
-import sys
+#import sys
 import scipy.integrate
 import matplotlib.pyplot as plt
 import scipy.ndimage.interpolation
 
-sys.path.append(".")
+#sys.path.append(".")
 
 from parameters import DiseaseParams, SimOpts, PlotOpts, Country_Info
 
@@ -48,8 +48,8 @@ class SEIR_Model:
         :param country_name: name e.g. "Switzerland"
         :param n_pop: number of habitants
         """
-        self.country_name = Country_Info.country_name
-        self.n_pop = Country_Info.country_population
+        self.country_name = country_name
+        self.n_pop = n_pop
 
     def model_seir(self, t: float, state: np.ndarray, disease_parameters: DiseaseParams, simulation_parameters: SimOpts):
         """

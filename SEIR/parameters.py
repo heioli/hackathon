@@ -46,7 +46,7 @@ class DiseaseParams:
 class SimOpts:
     """ Simulation Options"""
     sim_length: int = 200  # In days
-    lockdown: bool = True  # If True, a lockdown will be simulated by changing beta
+    lockdown: bool = False  # If True, a lockdown will be simulated by changing beta
     lockdown_delay: int = 25  # In Days, from start of exposure
     icu_beds: int = 4000  # ICU units available
     # hosp_beds: int = 0  # TODO Use this
