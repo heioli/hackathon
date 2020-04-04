@@ -112,7 +112,7 @@ class SEIR_Model:
 
     def _parse_results(self, results: Store_Results, disease_parameters: DiseaseParams, simulation_parameters: SimOpts):
         """
-        T.b.d
+        Private helper function to calculate death rate given some additional parameter assumption
         """
         T, S, E, I, R = results.T, results.S, results.E, results.I, results.R
 
