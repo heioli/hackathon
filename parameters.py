@@ -57,7 +57,7 @@ class SimOpts:
 
 @dataclass
 class Country_Info:
-    country_name: str = 'Switzland'
+    country_name: str = 'Switzerland'
     country_population: int = 7000000
 
 @dataclass

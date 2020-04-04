@@ -3,6 +3,7 @@ import numpy as np
 import sys
 import scipy.integrate
 import matplotlib.pyplot as plt
+import scipy.ndimage.interpolation
 
 sys.path.append(".")
 
@@ -100,9 +101,55 @@ class SEIR_Model:
 
         raw_results = Store_Results(T=T, S=S, E=E, I=I, R=R)
 
-        parsed_results = raw_results
+        #Without additional parameters calculated
+        #parsed_results = raw_results
+
+        #With additional model parameters
+        parsed_results = self._parse_results(raw_results, disease_parameters, simulation_parameters)
 
         return parsed_results
+
+
+    def _parse_results(self, results: Store_Results, disease_parameters: DiseaseParams, simulation_parameters: SimOpts):
+        """
+        T.b.d
+        """
+        T, S, E, I, R = results.T, results.S, results.E, results.I, results.R
+
+        F = I*disease_parameters.find_ratio #calculate infected found at given time
+        H = I*disease_parameters.rate_icu*disease_parameters.time_hospital/disease_parameters.time_infected #is that correct?
+        P = I/self.n_pop*100 #Probability of a random person to be infected
+
+        #Estimate death population from recovered population with the influence of the hospital beds
+        D = np.arange(simulation_parameters.sim_length) #initialize death array
+        
+        R_prev = 0
+        D_prev = 0
+
+        for i, t in enumerate(results.T):
+            I_FR = disease_parameters.rate_fatality_0 if H[i] <= simulation_parameters.icu_beds else disease_parameters.rate_fatality_1
+            D[i] = D_prev + I_FR*(R[i] - R_prev)
+            R_prev = R[i]
+            D_prev = D[i]
+
+        if simulation_parameters.add_delays is True:
+            F = self.delay(F, disease_parameters.lag_symptom_to_hosp + disease_parameters.lag_testing + disease_parameters.lag_communication)
+            I = self.delay(H, disease_parameters.lag_symptom_to_hosp)
+            D = self.delay(D, disease_parameters.time_hospital + disease_parameters.lag_communication)
+
+        results.P = P
+        results.F = F
+        results.H = H
+        results.D = D
+
+        return results
+
+    @staticmethod
+    def delay(array: np.ndarray, days_shift: int):
+        """
+        Use scipy method to shift values with spline interpolation
+        """
+        return scipy.ndimage.interpolation.shift(array, days_shift, cval=0)
 
 
 if __name__ == '__main__':
@@ -114,10 +161,13 @@ if __name__ == '__main__':
     model = SEIR_Model(country_parameters.country_name, country_parameters.country_population)
     results = model.run_seir(disease_parameters, simulation_paramters)
 
-    plt.plot(results.T,results.S)
-    plt.plot(results.T,results.E)
-    plt.plot(results.T,results.I)
-    plt.plot(results.T,results.R)
+    plt.plot(results.T,results.S, label='Susceptible')
+    plt.plot(results.T,results.E, label='Exposed')
+    plt.plot(results.T,results.I, label='Infected')
+    plt.plot(results.T,results.R, label='Recovered')
+    plt.plot(results.T,results.D, label='Deaths')
+    plt.legend()
     plt.show()
 
+    print(results.D[-1])
 
