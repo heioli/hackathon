@@ -2,6 +2,7 @@ from dataclasses import dataclass
 import numpy as np
 import sys
 import scipy.integrate
+import matplotlib.pyplot as plt
 
 sys.path.append(".")
 
@@ -109,14 +110,14 @@ if __name__ == '__main__':
     disease_parameters = DiseaseParams()
     simulation_paramters = SimOpts()
     country_parameters = Country_Info()
-
-    print("Gamma", disease_parameters.gamma)
-    
-
+  
     model = SEIR_Model(country_parameters.country_name, country_parameters.country_population)
     results = model.run_seir(disease_parameters, simulation_paramters)
 
-    print(results)
-
+    plt.plot(results.T,results.S)
+    plt.plot(results.T,results.E)
+    plt.plot(results.T,results.I)
+    plt.plot(results.T,results.R)
+    plt.show()
 
 
