@@ -3,6 +3,7 @@ import dash_core_components as dcc
 import dash_html_components as html
 import sys
 from dash.dependencies import Input, Output
+import numpy as np
 
 from parameters import DiseaseParams, SimOpts, PlotOpts, Country_Info
 from SEIR_Sim import Store_Results, SEIR_Model
@@ -45,7 +46,7 @@ app.layout = html.Div([
     ),
     html.Div(className='w3-content w3-margin-left w3-margin-right', children=[
         html.H1(className='w3-wide w3-center', children = ['SEIR Model']),
-        html.P(className='w3-justify w3-center', children=['A very simple app to play around with the SEIR model.']),
+        html.P(className='w3-justify w3-center', children=['A very simple app to play around with a SEIR model to investigate the developments of an epidemic.']),
         html.Div([
             html.Div(className='w3-col m2', children=[
                 custom_slider('Population', 'pop_slider', 0, 10**7, 10**6, 1000),
@@ -110,6 +111,7 @@ def calc_SEIR_graph(slider_pop,slider_day,beta_slider,gamma_slider,sigma_slider,
             {'x': results.T, 'y': results.I, 'name': 'Infected'},
             {'x': results.T, 'y': results.R, 'name': 'Recovered'},
             {'x': results.T, 'y': results.D, 'name': 'Deaths'},
+            {'x': results.T, 'y': results.I+results.R, 'name': 'Infected + Recovered'},
         ],
         'layout': {
             'xaxis': {'showgrid': False},
