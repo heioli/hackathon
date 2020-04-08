@@ -9,7 +9,9 @@ import scipy.ndimage.interpolation
 
 from parameters import DiseaseParams, SimOpts, PlotOpts, Country_Info
 
-
+"""
+Model reimplemented according to https://github.com/cfculhane/coronaSEIR/tree/master/corona_model
+"""
 
 
 @dataclass

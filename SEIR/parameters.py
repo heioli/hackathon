@@ -1,5 +1,6 @@
 """
 File to store all simulation parameters of main_corona_SEIR.py
+source: https://github.com/cfculhane/coronaSEIR/tree/master/corona_model
 """
 from dataclasses import dataclass
 
@@ -45,7 +46,7 @@ class DiseaseParams:
 @dataclass
 class SimOpts:
     """ Simulation Options"""
-    sim_length: int = 200  # In days
+    sim_length: int = 39  # In days
     lockdown: bool = False  # If True, a lockdown will be simulated by changing beta
     lockdown_delay: int = 25  # In Days, from start of exposure
     icu_beds: int = 4000  # ICU units available
